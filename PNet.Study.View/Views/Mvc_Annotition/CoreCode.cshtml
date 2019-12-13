@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "DetailCode";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br /><br />
+<div class="container-fluid">
+    <header>
+        @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-primary" }) <h1> ASP.NET MVC内置六大验证特性</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">Model实体类</div>
+                <div class="card-body">
+                    <pre>
+/// &lt;summary&gt;
+/// Model实体类
+/// &lt;/summary&gt;
+public class UserRegistModel
+{
+
+    /*
+        * 1、Required 必填(默认为不允许为空。允许为空则添加AllowEmptyStrings = true)
+        * 2、StringLength 长度
+        * 3、Compare 比较
+        * 4、RegularExpression 正则
+        * 5、Range 范围
+        * 6、Remote 回调
+        * **/
+
+    //必填
+    [<span class="red">Required</span>(AllowEmptyStrings = false,ErrorMessage ="用户名不能为空")]
+    public string UserName { get; set; }
+
+    //必填，长度不超20
+    [Required]
+    [<span class="red">StringLength</span>(20, ErrorMessage = "设置的密码不能超过20个字符")]
+    public string Password { get; set; }
+
+    //必填，两次密码要一致
+    [Required]
+    [<span class="red">Compare</span>("Password",ErrorMessage ="两次密码不一致")]
+    public string ConfirmPassword { get; set; }
+
+    //必填，且是邮箱模式   （@@@@"[A-Za-z0-9._%+-]+@@@@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")）
+    [Required]
+    [<span class="red">RegularExpression</span>(@@@@"^\w+([-+.]\w+)*@@@@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "邮箱格式不正确")]
+    public string Email { get; set; }
+
+    //必填，年龄15-30
+    [Required]
+    [<span class="red">Range</span>(15,30,ErrorMessage ="年龄不符合")]
+    public int Age { get; set; }
+        
+}
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">表单代码</div>
+                <div class="card-body">
+                    <pre>
+@@using (Html.BeginForm("您的Action", "您的控制器", FormMethod.Post, new { @@class = "form-horizontal" }))
+{
+    &lt;div class="form-group row"&gt;
+        @@Html.Label("用户名：", new { @@class = "col-sm-2" })
+        &lt;div class="col-sm-10"&gt;
+            @@Html.TextBoxFor(m =&gt; m.UserName, new { @@class = "form-control form-control-success" })
+            &lt;small class="form-text"&gt;<span class="red">@@Html.ValidationMessageFor</span>(m =&gt; m.UserName)&lt;/small&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group row"&gt;
+        @@Html.Label("密码：", new { @@class = "col-sm-2" })
+        &lt;div class="col-sm-10"&gt;
+            @@Html.Password("Password","", new { @@class = "form-control" })
+            &lt;small class="form-text"&gt;@@Html.ValidationMessageFor(m =&gt; m.Password)&lt;/small&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group row"&gt;
+        @@Html.Label("确认密码：", new { @@class = "col-sm-2" })
+        &lt;div class="col-sm-10"&gt;
+            @@Html.Password("ConfirmPassword", "", new { @@class = "form-control" })
+            &lt;small class="form-text"&gt;@@Html.ValidationMessageFor(m =&gt; m.ConfirmPassword)&lt;/small&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group row"&gt;
+        @@Html.Label("邮件：", new { @@class = "col-sm-2" })
+        &lt;div class="col-sm-10"&gt;
+            @@Html.TextBox("Email", "", new { @@class = "form-control" })
+            &lt;small class="form-text"&gt;@@Html.ValidationMessageFor(m =&gt; m.Email)&lt;/small&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group row"&gt;
+        @@Html.Label("年龄：", new { @@class = "col-sm-2" })
+        &lt;div class="col-sm-10"&gt;
+            @@Html.TextBox("Age", "", new { @@class = "form-control" })
+            &lt;small class="form-text"&gt;@@Html.ValidationMessageFor(m =&gt; m.Age)&lt;/small&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group row"&gt;
+        &lt;div class="col-sm-10 offset-sm-2"&gt;
+            &lt;input type="submit" value="提交" class="btn btn-primary" /&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+

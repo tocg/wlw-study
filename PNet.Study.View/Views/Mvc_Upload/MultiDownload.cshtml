@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "MultiDownload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>MultiDownload</h2>
+
+@using (Html.BeginForm("MultiDownload", "Mvc_Upload",FormMethod.Post ))
+{
+<div>
+
+    文件路径：<input type="text" name="httpUrl" />
+</div>
+    <div>
+        线程数量：<input type="text" name="threadNumber" />
+    </div>
+    <div>
+        <input type="submit" value="开始下载" />
+    </div>
+}
+

@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model PNet.Study.View.Models.UserRegistModel
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<style>
+    img {
+        width: 100%;
+    }
+
+    .form-text {
+        color: red;
+    }
+</style>
+<br /><br />
+<div class="container-fluid">
+    <header>
+        <h1>ASP.NET MVC内置六大验证特性</h1> 【点击查看：@Html.ActionLink("核心代码", "corecode")】
+    </header>
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4>验证特性说明</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>看右边效果演示(点击提交按钮，进行数据验证)</div>
+                    <div>
+                        <span>说明：</span>调用ASP.Net MVC自带Model验证
+                        <ul>
+                            <li>
+                                <img src="~/Content/resource/mvc1.png" title="图片可以另存为查看" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>调用：</span>
+                        <ul style="color:red;">
+                            <li>引用/Scripts/jquery-1.10.2.min.js</li>
+                            <li>引用/Scripts/jquery.validate.min.js</li>
+                            <li>引用/Scripts/jquery.validate.unobtrusive.min.js</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        见：【@Html.ActionLink("核心代码", "corecode")】
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header">
+                    <h4>MVC验证演示</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("DataAnnotation", "Mvc_Annotition", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <div class="form-group row">
+                            @Html.Label("用户名：", new { @class = "col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-control-success" })
+                                <small class="form-text">@Html.ValidationMessageFor(m => m.UserName)</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("密码：", new { @class = "col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.Password("Password", "", new { @class = "form-control" })
+                                <small class="form-text">@Html.ValidationMessageFor(m => m.Password)</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("确认密码：", new { @class = "col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.Password("ConfirmPassword", "", new { @class = "form-control" })
+                                <small class="form-text">@Html.ValidationMessageFor(m => m.ConfirmPassword)</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("邮件：", new { @class = "col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.TextBox("Email", "", new { @class = "form-control" })
+                                <small class="form-text">@Html.ValidationMessageFor(m => m.Email)</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("年龄：", new { @class = "col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.TextBox("Age", "", new { @class = "form-control" })
+                                <small class="form-text">@Html.ValidationMessageFor(m => m.Age)</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10 offset-sm-2">
+                                <input type="submit" value="提交" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$("form").validate();
+        //$("form").validate({
+        //    rules: {
+        //        UserName: { required: true },
+        //        birhthDate: { required: true, date: true },
+        //        blogAddress: { url: true },
+        //        emailAddress: { required: true, email: true }
+        //    },
+
+        //    messages: {
+        //        UserName: { required: "请输入姓名" },
+        //        birhthDate: { required: "请输入出生日期", date: "请输入一个合法的日期" },
+        //        blogAddress: { url: "请输入一个合法的URL" },
+        //        emailAddress: { required: "请输入Email地址", email: "请输入一个合法的Email地址" }
+        //    }
+        //});
+    });
+</script>

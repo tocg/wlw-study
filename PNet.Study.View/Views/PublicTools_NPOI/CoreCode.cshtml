@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "NPOI核心代码";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br /><br />
+<div class="container-fluid">
+    <header>
+        @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-primary" }) <h1>NPOI组件导入/导出Excel核心代码</h1>
+    </header>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">导出核心代码</div>
+                <div class="card-body">
+                    <pre>
+//DataTable导出到Excel（dt：要导出的数据源，strValues：自定义Excel列名，Key为列名，Value为自段名）
+public static MemoryStream ExportExcel(DataTable dt, Dictionary&lt;string, string&gt; strValues)
+{
+    //第一步，创建工作区域                
+    HSSFWorkbook workbook = new HSSFWorkbook();
+    //第二步：创建一个Sheet
+    ISheet sheet1 = workbook.CreateSheet("sheet1");
+    //第三步：创建第一行表头（即Excel列名）
+    NPOI.SS.UserModel.IRow headerrow = sheet1.CreateRow(0);
+    //第四步：根据自定义列名，填充
+    int h = 0;
+    foreach (var str in strValues)
+    {
+        ICell cell = headerrow.CreateCell(h);
+        cell.SetCellValue(str.Key);
+        //cell.CellStyle = style;
+        h++;
+    }
+    //第五步：将DataTable数据填充到Eexcel数据行
+    if (dt != null && dt.Rows.Count > 0)
+    {
+        int r = 1;
+        foreach (DataRow dr in dt.Rows)
+        {
+            IRow sheetRow = sheet1.CreateRow(r);
+            int k = 0;
+            foreach (var str in strValues)
+            {
+                ICell _cell0 = sheetRow.CreateCell(k);
+                _cell0.SetCellValue(Convert.ToString(dr[str.Value]));
+                k++;
+            }
+            r++;
+        }
+    }
+    //第六步：将填充好了的Excel保存到内存流中，并返回，方便调用处理
+    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+    workbook.Write(ms);
+    return ms;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">导入核心代码</div>
+                <div class="card-body">
+                    <pre>
+//导入Excel，将数据存放在DataTable中(参数：文件路径)
+public static DataTable ImportExcel( string filePath)
+{
+    IWorkbook workbook = null;
+    //第一步：用只读的方式打开上传的文件
+    using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+    {
+        //第二步：根据扩展名，来判断创建哪种方式的工作区域（工作溥）
+        switch (filePath.Substring(0,filePath.LastIndexOf(".")))
+        {
+            case ".xlsx":
+                workbook = new XSSFWorkbook(file);
+                break;
+            default:
+                workbook = new HSSFWorkbook(file);
+                break;
+        }
+
+        //第三步：得到该工作区域中的第一个Sheet
+        ISheet sheet = workbook.GetSheetAt(0);
+
+        //第四步：获取这个Sheet中有多少行，及一行有多少列数据
+        IRow ir = sheet.GetRow(0);
+        int columns = ir.LastCellNum;//（某行）有多少列
+        int rows = sheet.LastRowNum;//多少行
+
+        //第五步：创建DataTable。将Excel第一行的列名作为表结构的列名
+        DataTable _dt = new DataTable();
+        for (int i = 0; i < columns; i++)
+        {
+            DataColumn dc = new DataColumn(ir.GetCell(i).ToString());
+            _dt.Columns.Add(dc);
+        }
+
+        //第六步：填充数据。从Excel第2行开始，将每一行的数据填充到DataTable的对应行中
+        for (int i = 1; i <= rows; i++)
+        {
+            IRow _ir = sheet.GetRow(i);//获取Excel中的行
+            DataRow dr = _dt.NewRow(); //创建DataTable一行
+            for (int j = _ir.FirstCellNum; j < columns; j++)//循环Excel中这一行的列
+            {
+                if (_ir.GetCell(j) != null)
+                    dr[j] = _ir.GetCell(j);
+            }
+            _dt.Rows.Add(dr);
+        }
+        return _dt;
+    }
+}
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

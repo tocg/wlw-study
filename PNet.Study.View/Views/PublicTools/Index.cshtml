@@ -1,0 +1,117 @@
+﻿
+
+@{
+    ViewBag.Title = "PublicToolsLib类库说明";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/content/ztree/js/jquery.ztree.core.min.js"></script>
+<link href="~/content/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+
+<br /><br />
+<div class="container-fluid">
+    <header>
+        <h1>PublicToolsLib类库说明</h1> 【点击下载：@Html.ActionLink("PublicToolsLib类库源码.zip", "CoreCode")】
+    </header>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>PublicToolsLib类库结构（本版本未全部测试，可以自行下载源码修改）</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <!-- ztree使用 2、html页中定义一个控件的ID为zTree (注意：区分大小写) -->
+                            <div id="zTree" class="ztree"> </div>
+                            <!-- zTree使用2 结束 -->
+                        </div>
+                        <div class="col-lg-8 cslist">
+                            <div class="NpoiExcelHelper">
+                                说明：1、NuGet包下载安装NPOI
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ztree使用 3、html页中脚本添加如下三项 -->
+<script type="text/javascript">
+
+    //第一项（定义树变量）
+    var zTree;
+
+    //第二项（设置树显示）
+    var setting = {
+
+        edit: {
+            enable: true,
+            showRemoveBtn: true,
+            showRenameBtn: true,
+            removeTitle: 'remove',
+            renameTitle: 'rename'
+        },
+        view:
+        {
+            dblClickExpand: false, showLine: true, selectedMulti: false
+        },
+        data: {
+            simpleData:
+            {
+                enable: true,
+                idKey: "ID",//"id"
+                pIdKey: "FatherID", //"pId"
+                rootPId: ""
+            },
+            key: {
+                name: "Name"
+            }
+        },
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj("zTree");
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                }
+                else {
+                    $('#myFrame').attr("src", treeNode.file + ".html");
+                    console.log('点击的Url为=' + treeNode.Name);
+                    return true;
+                }
+            },
+        }
+    };
+
+    //第三项（加载树数据）
+    //$(document).ready(function () {
+    //    $.get('/Goods/GetDepartments', function (data) {
+    //        //d = eval('' + data + '');
+    //        //console.log(data);
+    //           var t = $("#zTree");
+    //            t = $.fn.zTree.init(t, setting, nodes);
+    //        //setEdit();
+    //    });
+    //});
+    var nodes = [
+        { ID: 1, FatherID: 0, Name: "PublicToolsLib" },
+        { ID: 11, FatherID: 1, Name: "HelpDB" },
+        { ID: 12, FatherID: 1, Name: "HelpExcel" },
+        { ID: 13, FatherID: 1, Name: "HelpImg" },
+        { ID: 14, FatherID: 1, Name: "HelpVCode" },
+        { ID: 15, FatherID: 1, Name: "HelpZip" },
+        { ID: 1201, FatherID: 12, Name: "NpoiExcelHelper.cs" },
+        { ID: 1202, FatherID: 12, Name: "OledbExcelHelper.cs" },
+        { ID: 1301, FatherID: 13, Name: "ImageHandlerHelper.cs" },
+        { ID: 1302, FatherID: 13, Name: "ImageWaterMarkHelper.cs" },
+        { ID: 1401, FatherID: 14, Name: "VerificationCodeHelper.cs" },
+        { ID: 1501, FatherID: 15, Name: "SharpZipHelper.cs" },
+    ];
+    var t = $("#zTree");
+    t = $.fn.zTree.init(t, setting, nodes);
+    t.expandAll(true);
+
+</script>
+<!-- zTree使用3 结束 -->

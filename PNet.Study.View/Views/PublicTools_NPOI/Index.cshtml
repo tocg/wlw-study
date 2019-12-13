@@ -1,0 +1,324 @@
+﻿
+
+@{
+    ViewBag.Title = "Excel导入导出";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+@model DataTable
+
+
+
+<br /><br />
+<div class="container-fluid">
+    <header>
+        <h1>使用NPOI组件导入/导出Excel</h1> 【点击查看：@Html.ActionLink("NPOI导入/导出核心代码", "CoreCode")】
+    </header>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>导出（下载）说明</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>看右边效果演示</div>
+                    <div><span>说明：</span>使用NPOI组件导出数据到Excel文档</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll（如果提示出错，可以再引用该项目debug目录下的Npoi.dll）</li>
+                            <li>2、调用HelpExcel.ExportExcel(DataTable,Dictionary&lt;string, string&gt;)方法</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        <ul>
+                            <li>
+                                //后台<br />
+                                //1、调用HelpExcel.NpoiExcelHelper.ExportExcel
+                                <pre>
+//获取将DataTable的数据写入的内存流
+public System.IO.MemoryStream GetExportExcelMemoryStream(DataTable dt)
+{
+    //自定义导出的列(Key为自定义列名，Value为数据表的列名)
+    Dictionary&lt;string, string&gt; keys = new Dictionary&lt;string, string&gt;();
+    keys.Add("列名1","column0" );
+    keys.Add("列名2","column1" );
+    keys.Add("列名3","column2" );
+    keys.Add("列名4", "column3" );
+
+    //调用封装导出方法
+    System.IO.MemoryStream ms = HelpExcel.NpoiExcelHelper.ExportExcel(dt, keys);
+
+    //返回内存流
+    return ms;
+}
+</pre>
+                                //2、下载
+                                <pre>
+//导出-浏览器下载方式
+public void NpoiExportByResponse()
+{
+    System.IO.MemoryStream ms = GetExportExcelMemoryStream(dt);
+
+    //导出的文件名
+    string strFileName = "Download_" + System.DateTime.Now.ToString("yyyy-MM-dd").Replace("-", "");
+
+    System.Web.HttpContext.Current.Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}.xls", strFileName));
+    System.Web.HttpContext.Current.Response.BinaryWrite(ms.ToArray());
+    ms.Close();
+    ms.Dispose();
+}
+
+//导出-文件流方式
+public FileResult NpoiExportByFileResult() {
+
+    System.IO.MemoryStream ms = GetExportExcelMemoryStream(dt);
+
+    //导出的文件名
+    string strFileName = "Download_" + System.DateTime.Now.ToString("yyyy-MM-dd").Replace("-", "");
+
+    return File(ms, "application/vnd.ms-excel", $"{strFileName}.xls");
+}
+</pre>
+                                //前台
+<pre style="font-size:16px;">
+                                <xmp>
+@@Html.ActionLink("点击【Response导出】", "NpoiExportByResponse", null, new { @@class = "btn btn-danger" })
+@@Html.ActionLink("点击【FileResult导出】", "NpoiExportByFileResult", null, new { @@class = "btn btn-primary" })
+    </xmp>
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>导出演示</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            @Html.ActionLink("点击【Response导出】", "NpoiExportByResponse", null, new { @class = "btn btn-danger" })
+                            @Html.ActionLink("点击【FileResult导出】", "NpoiExportByFileResult", null, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        @foreach (DataColumn dc in Model.Columns)
+                                        {
+                                            <th>
+                                                @dc.ColumnName
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow dr in Model.Rows)
+                                    {
+                                        <tr>
+
+                                            @foreach (DataColumn d in Model.Columns)
+                                            {
+                                                <td>
+                                                    @dr[d.ColumnName]
+                                                </td>
+                                            }
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>导入（上传）说明</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>看右边效果演示(导入成功会刷新页面，数据显示在列表中)</div>
+                    <div><span>说明：</span>使用NPOI组件导入Excel文档的数据到DataTable</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll（如果提示出错，可以再引用该项目debug目录下的Npoi.dll）</li>
+                            <li>2、调用HelpExcel.ImportExcel(string)方法</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        <ul>
+                            <li>
+                                //后台<br />
+<pre>
+//上传文件
+public ActionResult NpoiImportUploadExcel(HttpPostedFileBase inputFile)
+{
+    if (inputFile == null)
+    {
+        return null;
+    }
+
+    //服务器上存放要上传的文件的目录存不存，不存在则创建
+    if (!Directory.Exists(Server.MapPath("/resource/")))
+    {
+        Directory.CreateDirectory(Server.MapPath("/resource/"));
+    }
+    //拼接文件路径
+    string filePath = Server.MapPath("/resource/" + inputFile.FileName);
+    //上传文件
+    inputFile.SaveAs(filePath);
+    //读取上传的文件到DataTable中
+    ReadUploadExcelToDataTable(filePath);
+
+    //上传完成后跳转。。。可以做自己的操作
+    return Redirect("/Excel/Index");
+}
+
+//读取excel文件内容存放到DataTable中
+public void ReadUploadExcelToDataTable(string strFilePath)
+{
+    DataTable _dt = HelpExcel.NpoiExcelHelper.ImportExcel(strFilePath);
+
+    //可以将导入的数据保存到数据库中，循环操作DataTable即可
+    //Session["dt"] = _dt;
+    //....
+}
+</pre>
+                                //前台<br />
+<pre style="font-size:16px;">
+                                <xmp>
+@@using (Html.BeginForm("NpoiImportUploadExcel", "Excel", FormMethod.Post, new { @@enctype = "multipart/form-data" }))
+{
+    <span>选择Excel文件：</span>
+    <input type="file" name="inputFile" /><!--这个name属性要和后台的Action(方法)中的参数名一致-->
+    <input type="submit" value="导入数据" class="btn btn-primary" />
+}
+    </xmp>
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>导入演示</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            @using (Html.BeginForm("NpoiImportUploadExcel", "Excel", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                            {
+                                <span>
+                                    选择Excel文件：
+                                </span>
+                                <input type="file" name="inputFile" />
+                                <input type="submit" value="导入数据" class="btn btn-primary" />
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        @foreach (DataColumn dc in Model.Columns)
+                                        {
+                                            <th>
+                                                @dc.ColumnName
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow dr in Model.Rows)
+                                    {
+                                        <tr>
+
+                                            @foreach (DataColumn d in Model.Columns)
+                                            {
+                                                <td>
+                                                    @dr[d.ColumnName]
+                                                </td>
+                                            }
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Winform导出（下载）说明</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>无</div>
+                    <div><span>说明：</span>使用NPOI组件导出数据到Excel文档</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll（如果提示出错，可以再引用该项目debug目录下的Npoi.dll）</li>
+                            <li>2、调用HelpExcel.ExportExcel(DataTable,Dictionary&lt;string, string&gt;)方法</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        <ul>
+                            <li>
+                                //后台<br />
+                                //1、调用HelpExcel.NpoiExcelHelper.ExportExcel
+                                <pre>
+//下载按钮
+private void button1_Click(object sender, EventArgs e)
+{
+    //直接调用dll中的导出Execl方法
+    MemoryStream ms =  PublicToolsLib.HelpExcel.NpoiExcelHelper.ExportExcel(dt, null);
+
+    saveFileDialog1.Filter = "Excel|*.xls";
+    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+    {
+        //将内存流写入文件
+        File.WriteAllBytes(saveFileDialog1.FileName, ms.ToArray());
+        MessageBox.Show("下载成功");
+    }
+}
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+

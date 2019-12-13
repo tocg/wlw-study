@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "文件解压压缩";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br /><br />
+<div class="container-fluid">
+    <header>
+        <h1>使用SharpZipLib组件对文件进行压缩、解压</h1> 【点击查看：@Html.ActionLink("文件压缩、解压核心代码", "")】
+    </header>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>文件压缩、解压</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>看右边效果演示</div>
+                    <div><span>说明：</span>使用SharpZipLib组件对文件(单个文件、文件目录)进行压缩、解压</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll（如果提示出错，可以再引用该项目debug目录下的ICSharpCode.SharpZipLib.dll。<span style="color:red;">该类中的方法未进行成功与否返回处理，可根据需要自己更改源代码</span>）</li>
+                            <li>2、调用HelpZip.SharpZipHelper.CompressFile(....)方法</li>
+                        </ul>
+                    </div>
+                    <div>
+                        //后台
+                        <pre>
+//压缩单个文件
+public void ZipCompressFile()
+{
+    //参数：第一个为要压缩的文件，第二个为压缩后保存的文件
+    HelpZip.SharpZipHelper.<span style="color:red;">CompressFile</span>(@@"C:\Users\lenovo\Desktop\dd.xls", @@"C:\Users\lenovo\Desktop\dd.zip");
+}
+
+//压缩整个目录
+public void ZipCompressDiectory()
+{
+    //参数：第一个要压缩的目录，第二个压缩后要保存的目录，第三个压缩后的文件别名，第四个是否加密
+    HelpZip.SharpZipHelper.<span style="color:red;">CompressDirectory</span>(@@"C:\Users\lenovo\Desktop\1704A",
+    @@"C:\Users\lenovo\Desktop", null,false);
+}
+
+//解压文件
+public void ZipUnCompressFile()
+{
+    //参数：第一个要解压的文件，第二个解压后要存放的目录，第三个密码（如果压缩文件有密码则需要传入）
+    HelpZip.SharpZipHelper.<span style="color:red;">UnCompressFile</span>(@@"C:\Users\lenovo\Desktop\1704A.zip",
+    @@"C:\Users\lenovo\Desktop\1705", "");
+    }
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h4>解压、压缩演示</h4></div>
+                <div class="card-body">
+                    暂无
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

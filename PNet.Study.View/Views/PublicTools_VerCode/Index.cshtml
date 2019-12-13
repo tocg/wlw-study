@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br /><br />
+<div class="container-fluid">
+    <header>
+        <h1>验证码的使用</h1>
+    </header>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>一、纯数字验证码</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span>@ViewBag.Code</div>
+                    <div><span>说明：</span>纯数字验证码（没提供刷新演示，可自己完善）</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll</li>
+                            <li>2、调用CreateNumberCodes(4),可以用ViewBag来传递</li>
+                            <li>3、视图上直接@@ViewBag.Code</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        <ul>
+                            <li>
+                                //后台<br />
+                                <pre>
+public ActionResult Index()
+{
+    string strCode = HelpVCode.VerificationCodeHelper.CreateNumberCodes(4);
+    ViewBag.Code = strCode;
+}
+</pre>
+<pre style="font-size:16px;">
+                                <xmp>
+//前台
+@@ViewBag.Code
+    </xmp>
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>二、字母数字组合图片形式</h4>
+                </div>
+                <div class="card-body">
+                    <div><span>效果：</span><img src="/PublicTools_VerCode/MixVerifyCode" title="看不清？刷新一下验证码" alt="Alternate Text" onclick="this.src=this.src+'?'" /></div>
+                    <div><span>说明：</span>可点击图片刷新，onlick事件刷新</div>
+                    <div>
+                        <span>调用：</span>
+                        <ul>
+                            <li>1、引用PublicToolsLib.dll</li>
+                            <li>2、创建Action，先获取字母与数字的组合验证码，再调用CreateImageCode(验证码)生成图片</li>
+                            <li>3、视图上直接&lt;img src="/controller/action"  /&gt;</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span>代码：</span>
+                        <ul>
+                            <li>
+                                //后台(创建Action)<br />
+<pre>
+public FileContentResult MixVerifyCode()
+{
+    //获取4位数的字母与数字组合的验证码
+    string strCode = HelpVCode.VerificationCodeHelper.CreateBlendCode(4);
+    //将验证码生成图片，并返回内存流
+    MemoryStream memory = HelpVCode.VerificationCodeHelper.CreateImageCode(strCode);
+    //将内存流以图片形式返回视图
+    return File(memory.ToArray(), "image/gif");
+}
+</pre>
+<pre style="font-size:16px;">
+                                <xmp>
+//前台
+<img src="/{控制器}/MixVerifyCode" alt="看不清？刷新一下验证码" onclick="this.src=this.src+'?'" />
+
+
+
+    </xmp>
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

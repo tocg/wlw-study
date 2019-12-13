@@ -1,0 +1,280 @@
+﻿[
+  {
+    "title": "数据库操作",
+    "children": [
+      {
+        "title": "存储过程分页",
+        "id": "1",
+        "href": "http://www.baidu.com",
+        "field": ""
+      },
+      {
+        "title": "事务",
+        "id": "",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "函数",
+        "id": "",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "触发器",
+        "id": "",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "索引",
+        "id": "",
+        "href": "",
+        "field": ""
+      }
+    ]
+  },
+  {
+    "title": "MVC",
+    "children": [
+      {
+        "title": "自定义路由",
+        "id": "",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "授权验证过滤器",
+        "id": "",
+        "href": "/mvc_annotition/",
+        "field": ""
+      }
+    ]
+  },
+  {
+    "title": "C#进阶",
+    "children": [
+      {
+        "title": "事务/委托",
+        "id": "1",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "线程/多线程",
+        "id": "1",
+        "href": "",
+        "field": ""
+      },
+      {
+        "title": "反射",
+        "id": "1",
+        "href": "",
+        "field": ""
+      }
+    ]
+  },
+  {
+    "title": "C#高级",
+    "children": [
+      {"title": "设计模式","id": "","href": ""}
+    ]
+  },
+  {
+    "title": "WebApi",
+    "children": [
+      { "title": "自定义路由" },
+      { "title": "WebApi安全" },
+      { "title": "HttpClient/Ajax" }
+    ]
+  },
+  {
+    "title": ".Net Core",
+    "children": [
+      { "title": "基础使用" },
+      { "title": "Dock" },
+      { "title": "Azure云" }
+    ]
+  },
+  {
+    "title": "技能点",
+    "children": [
+      {
+        "title": "限制级缓存",
+        "children": [
+          {
+            "title": "Session",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "Cookie",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "Application",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "Cache",
+            "id": "",
+            "href": ""
+          }
+        ]
+      },
+      {
+        "title": "表单控件",
+        "id": "",
+        "href": "",
+        "field": "",
+
+        "children": [
+          { "title": "下拉框及联动" },
+          { "title": "复选框" },
+          { "title": "单选框" }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "框架控件接口",
+    "children": [
+
+      {
+        "title": "ORM",
+        "children": [
+          {
+            "title": "EF",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "Dapper",
+            "id": "",
+            "href": ""
+          }
+        ]
+      },
+      {
+        "title": "前端框架",
+        "children": [
+
+          {
+            "title": "BootStrap",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "LayUI",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "EasyUI",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "Vue",
+            "id": "",
+            "href": ""
+          }
+        ]
+      },
+      {
+        "title": "第三方控件",
+        "children": [
+
+          {
+            "title": "Ztree",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "ECharts",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "地图(百度)",
+            "id": "",
+            "href": ""
+          }
+        ]
+      },
+      {
+        "title": "第三方接口",
+        "children": [
+
+          {
+            "title": "短信验证码",
+            "id": "",
+            "href": ""
+          },
+          {
+            "title": "滑块验证码",
+            "id": "",
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "类库封装",
+    "children": [
+      {
+        "title": "PublicToolsLib",
+        "children": [
+          {
+            "title": "类库介绍",
+            "href": "/publictools"
+          },
+          {
+            "title": "随机验证码",
+            "href": "/publictools_vercode/"
+          },
+          {
+            "title": "文件解压压缩",
+            "href": "/publictools_zip/"
+          },
+          {
+            "title": "导入导出",
+            "children": [
+              {
+                "title": "NPOI",
+                "href": "/publictools_npoi/"
+              },
+              {
+                "title": "Aspose.Cell"
+              }
+
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "项目流程"
+  },
+  {
+    "title": "项目参考",
+    "children": [
+      {
+        "title": "企业应用",
+        "children": [
+          {
+            "title": "ERP",
+            "href": "http://project.erp.lyetech.com",
+            "target": "_blank"
+          }
+        ]
+      },
+      { "title": "店商购物" },
+      { "title": "金融贸易" }
+    ]
+  }
+]
